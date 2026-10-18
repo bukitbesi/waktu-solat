@@ -1,0 +1,69 @@
+name: Check JAKIM zone codes
+
+on:
+  schedule:
+    - cron: '17 22 * * *' # 06:17 Malaysia time
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['v2/js/ws.js', '.github/scripts/check-zones.mjs']
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: check-zones
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Ask e-solat for every zone
+        id: check
+        run: |
+          set +e
+          node .github/scripts/check-zones.mjs
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Open, update or close the tracking issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CODE: ${{ steps.check.outputs.code }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="JAKIM zone check failing"
+          existing=$(gh issue list --state open --search "\"$title\" in:title" --json number --jq '.[0].number')
+
+          if [ "$CODE" = "0" ]; then
+            if [ -n "$existing" ]; then
+              gh issue close "$existing" --comment "All zones return a JAKIM timetable again. ($RUN_URL)"
+            fi
+            exit 0
+          fi
+
+          if [ "$CODE" = "2" ]; then
+            echo "::error::No zone codes found in the widget file"
+            exit 1
+          fi
+
+          printf '\n[Run log](%s)\n' "$RUN_URL" >> zone-report.md
+          if [ -n "$existing" ]; then
+            # only comment when the problem changed, so a long outage doesn't spam the issue
+            last=$(gh issue view "$existing" --json comments,body --jq '(.comments | last | .body) // .body')
+            if [ "$(echo "$last" | sed '/\[Run log\]/d')" != "$(sed '/\[Run log\]/d' zone-report.md)" ]; then
+              gh issue comment "$existing" --body-file zone-report.md
+            fi
+          else
+            gh issue create --title "$title" --body-file zone-report.md
+          fi
+          # a broken zone code fails the run so GitHub emails you; an outage only updates the issue
+          [ "$CODE" = "1" ] && exit 1 || exit 0
