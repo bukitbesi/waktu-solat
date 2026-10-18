@@ -21,11 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Ask e-solat for every zone
         id: check
@@ -40,6 +40,17 @@ jobs:
           CODE: ${{ steps.check.outputs.code }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
+          [ -f zone-report.md ] && cat zone-report.md >> "$GITHUB_STEP_SUMMARY"
+          if [ "$CODE" = "2" ]; then
+            echo "::error::No zone codes found in the widget file"
+            exit 1
+          fi
+
+          # with Issues turned off the failed run (and its emailed notice) is the alert
+          if [ "$(gh repo view "$GITHUB_REPOSITORY" --json hasIssuesEnabled --jq .hasIssuesEnabled)" != "true" ]; then
+            [ "$CODE" = "1" ] && exit 1 || exit 0
+          fi
+
           title="JAKIM zone check failing"
           existing=$(gh issue list --state open --search "\"$title\" in:title" --json number --jq '.[0].number')
 
@@ -48,11 +59,6 @@ jobs:
               gh issue close "$existing" --comment "All zones return a JAKIM timetable again. ($RUN_URL)"
             fi
             exit 0
-          fi
-
-          if [ "$CODE" = "2" ]; then
-            echo "::error::No zone codes found in the widget file"
-            exit 1
           fi
 
           printf '\n[Run log](%s)\n' "$RUN_URL" >> zone-report.md
