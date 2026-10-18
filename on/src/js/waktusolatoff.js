@@ -19,31 +19,33 @@
         ],
         'kelantan': [
             {code: 'KTN01', name: 'Kota Bharu, Bachok, Pasir Puteh, Tumpat, Pasir Mas, Tanah Merah, Machang, Kuala Krai'},
-            {code: 'KTN03', name: 'Jeli, Gua Musang (Mukim Galas, Bertam)'}
+            {code: 'KTN02', name: 'Jeli, Gua Musang (Mukim Galas, Bertam)'}
         ],
         'melaka': [
             {code: 'MLK01', name: 'Seluruh Negeri Melaka'}
         ],
         'negerisembilan': [
             {code: 'NGS01', name: 'Tampin, Jempol'},
-            {code: 'NGS02', name: 'Jelebu, Kuala Pilah, Port Dickson, Rembau, Seremban'}
+            {code: 'NGS02', name: 'Jelebu, Kuala Pilah, Rembau'},
+            {code: 'NGS03', name: 'Port Dickson, Seremban'}
         ],
         'pahang': [
             {code: 'PHG01', name: 'Pulau Tioman'},
-            {code: 'PHG02', name: 'Kuantan, Pekan, Rompin, Muadzam Shah'},
+            {code: 'PHG02', name: 'Kuantan, Pekan, Muadzam Shah'},
             {code: 'PHG03', name: 'Jerantut, Temerloh, Maran, Bera, Chenor, Jengka'},
             {code: 'PHG04', name: 'Bentong, Lipis, Raub'},
             {code: 'PHG05', name: 'Genting Sempah, Janda Baik, Bukit Tinggi'},
-            {code: 'PHG06', name: 'Cameron Highlands, Genting Highlands, Bukit Fraser'}
+            {code: 'PHG06', name: 'Cameron Highlands, Genting Highlands, Bukit Fraser'},
+            {code: 'PHG07', name: 'Rompin'}
         ],
         'perak': [
             {code: 'PRK01', name: 'Tapah, Slim River, Tanjung Malim'},
             {code: 'PRK02', name: 'Kuala Kangsar, Sg. Siput, Ipoh, Batu Gajah, Kampar'},
             {code: 'PRK03', name: 'Lenggong, Pengkalan Hulu, Grik'},
             {code: 'PRK04', name: 'Temengor, Belum'},
-            {code: 'PRK05', name: 'Kg Gajah, Teluk Intan, Bagan Datuk, Seri Iskandar'},
-            {code: 'PRK06', name: 'Beruas, Parit, Lumut, Sitiawan, Pulau Pangkor'},
-            {code: 'PRK07', name: 'Selama, Taiping, Bagan Serai, Parit Buntar'}
+            {code: 'PRK05', name: 'Kg Gajah, Teluk Intan, Bagan Datuk, Seri Iskandar, Beruas, Parit, Lumut, Sitiawan, Pulau Pangkor'},
+            {code: 'PRK06', name: 'Selama, Taiping, Bagan Serai, Parit Buntar'},
+            {code: 'PRK07', name: 'Bukit Larut'}
         ],
         'perlis': [
             {code: 'PLS01', name: 'Seluruh Negeri Perlis'}
@@ -85,11 +87,10 @@
             {code: 'TRG04', name: 'Dungun, Kemaman'}
         ],
         'wlp': [
-            {code: 'WLY01', name: 'Kuala Lumpur'},
-            {code: 'WLY02', name: 'Putrajaya'}
+            {code: 'WLY01', name: 'Kuala Lumpur, Putrajaya'}
         ],
         'labuan': [
-            {code: 'LBN01', name: 'Labuan'}
+            {code: 'WLY02', name: 'Labuan'}
         ]
     };
 
