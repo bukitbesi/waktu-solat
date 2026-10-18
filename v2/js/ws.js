@@ -156,7 +156,10 @@
                 currentState = data.state;
                 // codes that e-solat does not recognise, saved by older versions of this widget
                 const moved = {KTN03: 'KTN02', LBN01: 'WLY02'}[data.code] ||
-                    (data.code === 'WLY02' && data.state === 'wlp' ? 'WLY01' : null);
+                    (data.code === 'WLY02' && data.state === 'wlp' ? 'WLY01' : null) ||
+                    // Perak was renumbered: old PRK06 (Lumut) is PRK05, old PRK07 (Taiping) is PRK06
+                    (data.code === 'PRK06' && /Lumut/.test(data.name) ? 'PRK05' : null) ||
+                    (data.code === 'PRK07' && /Taiping/.test(data.name) ? 'PRK06' : null);
                 if (moved) {
                     currentZoneCode = moved;
                     currentZoneName = findZoneByCode(moved).name;
